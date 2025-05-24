@@ -1,1 +1,0 @@
-# Quiz-Introdu-o-Linguagem-de-Programa-o-
