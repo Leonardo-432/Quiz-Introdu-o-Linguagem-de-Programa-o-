@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Verdadeiro ou Falso - Programação</title>
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #f0f0f0; padding: 20px; }
+    .quiz-container { background: white; padding: 20px; border-radius: 10px; max-width: 800px; margin: auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+    h1 { text-align: center; }
+    .question { margin-bottom: 20px; }
+    .options button { margin: 5px; padding: 10px 20px; }
+    .result { text-align: center; font-weight: bold; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Quiz: Verdadeiro ou Falso</h1>
+    <div id="quiz"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "Linguagens de máquina são compostas por instruções binárias.", answer: true },
+      { question: "Linguagens de alto nível são mais próximas da linguagem de máquina.", answer: false },
+      { question: "Compiladores traduzem código-fonte diretamente para linguagem de máquina.", answer: true },
+      { question: "Interpretadores executam o código fonte linha por linha.", answer: true },
+      { question: "Um programa de computador é uma sequência de instruções que dizem ao computador o que fazer.", answer: true },
+      { question: "Linguagens de baixo nível são mais fáceis de aprender que as de alto nível.", answer: false },
+      { question: "Tradutores são responsáveis por converter uma linguagem de programação em outra.", answer: true },
+      { question: "Analisadores léxicos detectam erros semânticos.", answer: false },
+      { question: "Analisadores sintáticos verificam a estrutura gramatical do código.", answer: true },
+      { question: "Analisadores semânticos se preocupam com o significado do código.", answer: true },
+      { question: "O pensamento computacional envolve a resolução sistemática de problemas.", answer: true },
+      { question: "Paradigmas de programação não influenciam na forma como o código é escrito.", answer: false },
+      { question: "Paradigma imperativo foca em instruções sequenciais e controle explícito.", answer: true },
+      { question: "Paradigma estruturado não utiliza estruturas de decisão ou repetição.", answer: false },
+      { question: "Paradigma orientado a objetos organiza o código em classes e objetos.", answer: true },
+      { question: "Paradigma funcional se baseia em mutabilidade e iteração.", answer: false },
+      { question: "Paradigma lógico usa fatos e regras para dedução lógica.", answer: true },
+      { question: "Paradigma de consulta é amplamente usado em bancos de dados relacionais.", answer: true },
+      { question: "Compiladores são mais lentos que interpretadores em tempo de execução.", answer: false },
+      { question: "Linguagens funcionais evitam efeitos colaterais.", answer: true },
+      { question: "Linguagens lógicas são baseadas em inferência lógica.", answer: true },
+      { question: "Pensamento computacional é exclusivo de cientistas da computação.", answer: false },
+      { question: "Código escrito em linguagens de máquina é facilmente compreendido por humanos.", answer: false },
+      { question: "Paradigmas declarativos especificam o que fazer, não como fazer.", answer: true },
+      { question: "SQL é um exemplo de linguagem declarativa.", answer: true },
+      { question: "Paradigmas imperativos são incompatíveis com linguagens modernas.", answer: false },
+      { question: "Paradigmas estruturados promovem o uso de sub-rotinas e estruturas de controle.", answer: true },
+      { question: "Paradigma orientado a objetos não permite reutilização de código.", answer: false },
+      { question: "Paradigmas funcionais promovem o uso de funções puras.", answer: true },
+      { question: "A análise semântica é feita antes da análise léxica.", answer: false },
+      { question: "Compiladores podem gerar código de máquina diretamente.", answer: true },
+      { question: "Interpretadores armazenam o código compilado para uso futuro.", answer: false },
+      { question: "Paradigmas lógicos usam provas e teoremas para resolver problemas.", answer: true },
+      { question: "Todas linguagens de programação seguem o mesmo paradigma.", answer: false },
+      { question: "A análise sintática acontece após a análise léxica.", answer: true },
+      { question: "Linguagens como Python suportam múltiplos paradigmas.", answer: true },
+      { question: "Pensamento computacional não inclui abstração.", answer: false },
+      { question: "Funções puras não têm efeitos colaterais externos.", answer: true },
+      { question: "Linguagens de máquina são portáveis entre diferentes arquiteturas.", answer: false },
+      { question: "Paradigmas de consulta não envolvem programação tradicional.", answer: true },
+      { question: "Analisadores léxicos geram tokens a partir do código fonte.", answer: true },
+      { question: "Paradigma estruturado foi criado após o paradigma orientado a objetos.", answer: false },
+      { question: "Linguagens como Prolog são baseadas em lógica.", answer: true },
+      { question: "Linguagens de programação não precisam de tradutores.", answer: false },
+      { question: "Compiladores identificam erros em tempo de execução.", answer: false },
+      { question: "Paradigmas imperativos utilizam controle de fluxo explícito.", answer: true },
+      { question: "Paradigmas declarativos detalham cada passo do algoritmo.", answer: false },
+      { question: "Análise semântica garante que as variáveis estejam devidamente declaradas.", answer: true },
+      { question: "Tradutores incluem compiladores e interpretadores.", answer: true },
+      { question: "Pensamento computacional promove a decomposição de problemas.", answer: true }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const quizDiv = document.getElementById("quiz");
+      quizDiv.innerHTML = "";
+
+      if (currentQuestion < questions.length) {
+        const q = questions[currentQuestion];
+
+        const questionEl = document.createElement("div");
+        questionEl.className = "question";
+        questionEl.innerHTML = `<h3>${currentQuestion + 1}. ${q.question}</h3>`;
+
+        const optionsEl = document.createElement("div");
+        optionsEl.className = "options";
+
+        const trueBtn = document.createElement("button");
+        trueBtn.textContent = "Verdadeiro";
+        trueBtn.onclick = () => handleAnswer(true);
+
+        const falseBtn = document.createElement("button");
+        falseBtn.textContent = "Falso";
+        falseBtn.onclick = () => handleAnswer(false);
+
+        optionsEl.appendChild(trueBtn);
+        optionsEl.appendChild(falseBtn);
+
+        quizDiv.appendChild(questionEl);
+        quizDiv.appendChild(optionsEl);
+      } else {
+        document.getElementById("result").textContent = `Você acertou ${score} de ${questions.length} questões!`;
+      }
+    }
+
+    function handleAnswer(answer) {
+      if (answer === questions[currentQuestion].answer) {
+        score++;
+      }
+      currentQuestion++;
+      loadQuestion();
+    }
+
+    loadQuestion();
+  </script>
+</body>
+</html>
